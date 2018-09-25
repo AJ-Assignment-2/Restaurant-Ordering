@@ -1,1 +1,1 @@
-# Restaurant Ordering Application
+# Restaurant Ordering Application (Standalone version)
