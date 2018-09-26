@@ -6,9 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.MenuItem.MenuItem;
-import model.MenuItem.MenuItemService.MenuItemAccessor;
+import services.MenuItemService.MenuItemAccessor;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main extends Application {
+    private static Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -20,6 +24,13 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        MenuItemAccessor menuItemAccessor = new MenuItemAccessor();
+        for (MenuItem item : menuItemAccessor.readMenuItems()) {
+            LOGGER.log(Level.INFO, "Menu Item: " + item.getId());
+            LOGGER.log(Level.INFO, "Name: " + item.getName());
+            LOGGER.log(Level.INFO, "This is a " + item.getCategory().toString() + " food.");
+        }
         launch(args);
+
     }
 }

@@ -1,16 +1,16 @@
 package model.MenuItem;
 
 public class MenuItem {
-    private int id;
     private String name;
+    private MenuItemType type;
+    private MenuItemCategory category;
+    private int id;
     private int price;
     private int energy;
     private double protean;
     private double carbohydrates;
     private double fat;
     private double fibre;
-    private MenuItemType type;
-    private MenuItemCategory category;
 
     public String getName() {
         return name;
