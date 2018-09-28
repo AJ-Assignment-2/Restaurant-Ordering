@@ -6,8 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.MenuItem.MenuItem;
+import model.Order.Order;
+import model.Order.OrderState;
 import services.MenuItemService.MenuItemAccessor;
+import services.OrderService.OrderAccessor;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,12 +29,22 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         MenuItemAccessor menuItemAccessor = new MenuItemAccessor();
+        Order testOrder = new Order();
+
         for (MenuItem item : menuItemAccessor.readMenuItems()) {
-            LOGGER.log(Level.INFO, "Menu Item: " + item.getId());
-            LOGGER.log(Level.INFO, "Name: " + item.getName());
-            LOGGER.log(Level.INFO, "This is a " + item.getCategory().toString() + " food.");
+            testOrder.addItem(item);
+            testOrder.addItem(item);
         }
+        OrderAccessor orderAccessor = new OrderAccessor();
+        testOrder.setCustomerName("Lionel");
+        testOrder.setTableNumber(4);
+        testOrder.setState(OrderState.WAITING);
+        orderAccessor.createOrder(testOrder);
+        List<Order> orders = orderAccessor.getAllOrders();
+
+        System.out.println("test");
         launch(args);
+
 
     }
 }

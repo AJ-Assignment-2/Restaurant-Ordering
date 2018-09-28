@@ -32,7 +32,7 @@ public class MenuItemAccessor implements MenuItemDao {
     private static final String COLUMN_TYPE = "type";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_ID + " INTEGER NOT NULL, " +
+            COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, " +
             COLUMN_NAME + " VARCHAR(100) NOT NULL, " +
             COLUMN_PRICE + " INTEGER NOT NULL, " +
             COLUMN_ENERGY + " INTEGER NOT NULL, " +
@@ -71,7 +71,7 @@ public class MenuItemAccessor implements MenuItemDao {
 
             while (menuItemResultSet.next()) {
                 MenuItem menuItem = new MenuItem();
-                menuItem.setId(menuItemResultSet.getString(COLUMN_ID));
+                menuItem.setId(menuItemResultSet.getInt(COLUMN_ID));
                 menuItem.setName(menuItemResultSet.getString(COLUMN_NAME));
                 menuItem.setPrice(menuItemResultSet.getInt(COLUMN_PRICE));
                 menuItem.setEnergy(menuItemResultSet.getInt(COLUMN_ENERGY));
