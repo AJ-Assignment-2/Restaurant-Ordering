@@ -1,5 +1,8 @@
 package model.MenuItem;
 
+/**
+ * Represents the different types of menu items.
+ */
 public enum MenuItemType {
     BREAKFAST,
     LUNCH,

@@ -5,6 +5,9 @@ import model.MenuItem.MenuItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents a customer's order with menu items.
+ */
 public class Order {
     private int id;
     private String customerName;
@@ -57,6 +60,12 @@ public class Order {
         this.menuItemSelections = new HashMap<>(menuItemSelections);
     }
 
+    /**
+     * Add a menu item to the HashMap of selections.
+     * If the item is already added, increment the HashMap key.
+     *
+     * @param item The item to add to the HashMap.
+     */
     public void addItem(MenuItem item) {
         if (menuItemSelections.containsKey(item)) {
             menuItemSelections.put(item, menuItemSelections.get(item) + 1);
