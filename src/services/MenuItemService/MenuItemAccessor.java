@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A class used to access menu items in the database.
+ */
 public class MenuItemAccessor implements MenuItemDao {
     private static final Logger LOGGER = Logger.getLogger( MenuItemAccessor.class.getName() );
 
@@ -32,7 +35,7 @@ public class MenuItemAccessor implements MenuItemDao {
     private static final String COLUMN_TYPE = "type";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_ID + " INTEGER NOT NULL, " +
+            COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, " +
             COLUMN_NAME + " VARCHAR(100) NOT NULL, " +
             COLUMN_PRICE + " INTEGER NOT NULL, " +
             COLUMN_ENERGY + " INTEGER NOT NULL, " +
@@ -45,6 +48,10 @@ public class MenuItemAccessor implements MenuItemDao {
 
     private final Connection connection;
 
+    /**
+     * Connect to the database, create the menu item table if it does not exist
+     * and populate the table if it contains no records.
+     */
     public MenuItemAccessor() {
         Connection attemptedConnection = null;
         try {
@@ -61,6 +68,11 @@ public class MenuItemAccessor implements MenuItemDao {
         }
     }
 
+    /**
+     * Return all menu items contained in the database.
+     *
+     * @return A list of menu item's contained in the database.
+     */
     @Override
     public List<MenuItem> readMenuItems() {
         String sql = "SELECT * FROM " + TABLE_NAME;
@@ -69,9 +81,10 @@ public class MenuItemAccessor implements MenuItemDao {
             Statement statement = connection.createStatement();
             ResultSet menuItemResultSet = statement.executeQuery(sql);
 
+            // For each returned menu item in the database, initialise a MenuItem object.
             while (menuItemResultSet.next()) {
                 MenuItem menuItem = new MenuItem();
-                menuItem.setId(menuItemResultSet.getString(COLUMN_ID));
+                menuItem.setId(menuItemResultSet.getInt(COLUMN_ID));
                 menuItem.setName(menuItemResultSet.getString(COLUMN_NAME));
                 menuItem.setPrice(menuItemResultSet.getInt(COLUMN_PRICE));
                 menuItem.setEnergy(menuItemResultSet.getInt(COLUMN_ENERGY));
@@ -83,12 +96,14 @@ public class MenuItemAccessor implements MenuItemDao {
                 String categoryString = menuItemResultSet.getString(COLUMN_CATEGORY);
                 String typeString = menuItemResultSet.getString(COLUMN_TYPE);
 
+                // Map the record's category String to an enum value.
                 Arrays.stream(MenuItemCategory.values()).forEach(menuItemCategory -> {
                     if (menuItemCategory.toString().toLowerCase().compareTo(categoryString.toLowerCase()) == 0) {
                         menuItem.setCategory(menuItemCategory);
                     }
                 });
 
+                // Map the record's type string to an enum value.
                 Arrays.stream(MenuItemType.values()).forEach(menuItemType -> {
                     if (menuItemType.toString().toLowerCase().compareTo(typeString.toLowerCase()) == 0) {
                         menuItem.setType(menuItemType);
@@ -104,6 +119,12 @@ public class MenuItemAccessor implements MenuItemDao {
         return menuItems;
     }
 
+    /**
+     * Inserts a given menu item into the database.
+     * A unique ID for the menu item must be supplied.
+     *
+     * @param itemToAdd The menu item to add to the database.
+     */
     @Override
     public void createMenuItem(MenuItem itemToAdd) {
         String sql = "INSERT INTO " + TABLE_NAME +" (" +
@@ -130,11 +151,9 @@ public class MenuItemAccessor implements MenuItemDao {
         }
     }
 
-    @Override
-    public void deleteMenuItem(int id) {
-
-    }
-
+    /**
+     * Create the menu item table. If the table exists an exception is thrown and caught.
+     */
     private void createMenuItemTable() {
         try {
             Statement statement = connection.createStatement();
@@ -144,6 +163,9 @@ public class MenuItemAccessor implements MenuItemDao {
         }
     }
 
+    /**
+     * Populate the menu item table with values contained in the menu_item_data.csv file.
+     */
     private void populateMenuItemTable() {
         BufferedReader reader;
         try {
@@ -152,6 +174,8 @@ public class MenuItemAccessor implements MenuItemDao {
 
             String line;
             Boolean firstLine = true;
+
+            // Read each line of the CSV, ignore the first line containing the column headings.
             while ((line = reader.readLine()) != null) {
                 if (!firstLine) {
                     String[] itemData = line.split(",");

@@ -1,5 +1,8 @@
 package model.MenuItem;
 
+/**
+ * Object to represent a single menu item.
+ */
 public class MenuItem {
     private String name;
     private MenuItemType type;
@@ -11,6 +14,7 @@ public class MenuItem {
     private double carbohydrates;
     private double fat;
     private double fibre;
+
 
     public String getName() {
         return name;
