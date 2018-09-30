@@ -1,6 +1,12 @@
 
 # Created by https://www.gitignore.io/api/java,bluej,netbeans,intellij
 
+### All IntelliJ IDE files ###
+.idea/
+
+### Generated Database Folder ###
+RestaurantOrderingDB/
+
 ### bluej ###
 # BlueJ: A Java IDE for programming beginners. http://bluej.org
 
