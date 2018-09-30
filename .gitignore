@@ -5,8 +5,9 @@
 .idea/
 RestaurantOrdering.iml
 
-### Generated Database Folder ###
+### Generated Database Folder and Derby files ###
 RestaurantOrderingDB/
+derby.log
 
 ### bluej ###
 # BlueJ: A Java IDE for programming beginners. http://bluej.org
