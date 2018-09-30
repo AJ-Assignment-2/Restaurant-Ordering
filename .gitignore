@@ -3,6 +3,7 @@
 
 ### All IntelliJ IDE files ###
 .idea/
+RestaurantOrdering.iml
 
 ### Generated Database Folder ###
 RestaurantOrderingDB/
