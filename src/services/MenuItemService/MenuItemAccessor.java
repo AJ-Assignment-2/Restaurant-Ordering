@@ -159,7 +159,7 @@ public class MenuItemAccessor implements MenuItemDao {
             Statement statement = connection.createStatement();
             statement.execute(CREATE_TABLE);
         } catch (Exception e) {
-            LOGGER.log(Level.INFO, "MenuItem table is probably already created: " + e.toString(), e);
+//            LOGGER.log(Level.INFO, "MenuItem table is probably already created: " + e.toString(), e);
         }
     }
 

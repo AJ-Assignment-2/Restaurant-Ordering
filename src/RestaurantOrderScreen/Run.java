@@ -10,7 +10,7 @@ public class Run {
         RestaurantOrderModel restaurantOrderModel=new RestaurantOrderModel();
         RestaurantOrderController restaurantOrderController=new RestaurantOrderController(restaurantOrderView, restaurantOrderModel);
         restaurantOrderView.setTitle("Restaurant Order");
-        restaurantOrderView.setSize(1350,700);
+        restaurantOrderView.setSize(900,500);
         restaurantOrderView.setVisible(true);
     }
 }

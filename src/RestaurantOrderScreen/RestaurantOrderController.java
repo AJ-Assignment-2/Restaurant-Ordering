@@ -7,7 +7,10 @@ import java.util.List;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import model.MenuItem.MenuItem;
+import static model.MenuItem.MenuItemCategory.BEVERAGE;
 import static model.MenuItem.MenuItemCategory.FOOD;
+import model.MenuItem.MenuItemType;
+import model.Order.Order;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,33 +30,23 @@ public class RestaurantOrderController {
         this.restaurantOrderModel=restaurantOrderModel;
         this.restaurantOrderView=restaurantOrderView;            
         
-        
-        this.restaurantOrderView.addMenuAboutListener(new MenuAboutListener());
         this.restaurantOrderView.addBreakfastRadioButtonListener(new BreakfastRadioButtonListener());
         this.restaurantOrderView.addLunchRadioButtonListener(new LunchRadioButtonListener());
         this.restaurantOrderView.addDinnerRadioButtonListener(new DinnerRadioButtonListener());
         this.restaurantOrderView.addEnterDataButtonListener(new EnterDataButtonListener());
         this.restaurantOrderView.addDisplayChoicesButtonListener(new DisplayChoicesButtonListener());
         this.restaurantOrderView.addDisplayOrderButtonListener(new DisplayOrderButtonListener());
-        this.restaurantOrderView.addPrepareButtonListener(new PrepareButtonListener());
-        this.restaurantOrderView.addBillButtonListener(new BillButtonListener());   
         this.restaurantOrderView.addClearDisplayButtonListener(new ClearButtonListener());
         this.restaurantOrderView.addQuitButtonListener(new QuitSystem());
-    }
-    
-    class MenuAboutListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            restaurantOrderView.showMessageDialog("","About Us");
-        }
     }
     
     class BreakfastRadioButtonListener implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            List<MenuItem> foodMenu=restaurantOrderModel.getMenuWithTypeCategory(FOOD, MenuItemType.BREAKFAST);
+            List<MenuItem> beverageMenu=restaurantOrderModel.getMenuWithTypeCategory(BEVERAGE, MenuItemType.BREAKFAST);
+            restaurantOrderView.addItemComboBox(foodMenu, beverageMenu);
         }
         
     }
@@ -62,7 +55,9 @@ public class RestaurantOrderController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            List<MenuItem> foodMenu=restaurantOrderModel.getMenuWithTypeCategory(FOOD, MenuItemType.LUNCH);
+            List<MenuItem> beverageMenu=restaurantOrderModel.getMenuWithTypeCategory(BEVERAGE, MenuItemType.LUNCH);
+            restaurantOrderView.addItemComboBox(foodMenu, beverageMenu);
         }
         
     }
@@ -71,7 +66,9 @@ public class RestaurantOrderController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            List<MenuItem> foodMenu=restaurantOrderModel.getMenuWithTypeCategory(FOOD, MenuItemType.DINNER);
+            List<MenuItem> beverageMenu=restaurantOrderModel.getMenuWithTypeCategory(BEVERAGE, MenuItemType.DINNER);
+            restaurantOrderView.addItemComboBox(foodMenu, beverageMenu);
         }
         
     }
@@ -80,11 +77,20 @@ public class RestaurantOrderController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            String customerName=restaurantOrderView.getCustomerName();
+            String customerTable=restaurantOrderView.getCustomerTable();
+            String chosenFood=restaurantOrderView.getChosenFood();
+            String chosenBeverage=restaurantOrderView.getChosenBeverage();
+            if(!chosenFood.equals("-------- Select the food --------") || !chosenBeverage.equals("-------- Select the beverage --------")){
+                ////////////////save to ther server
+                System.out.println("SAVE TO SERVER AT THIS TIME");
+                System.out.println("CUSTOMER NAME: "+restaurantOrderView.getCustomerName());
+                System.out.println("CUSTOMER TABLE: "+restaurantOrderView.getCustomerTable());
+                System.out.println("CUSTOMER CHOOSE FOOD: "+chosenFood);
+                System.out.println("CUSTOMER CHOOSE BEVERAGE: "+chosenBeverage);
+                restaurantOrderModel.setListCustomerOrder(customerName, customerTable, chosenFood, chosenBeverage);
+            } else restaurantOrderView.showErrorDialog("Hi "+restaurantOrderView.getCustomerName()+"\nPlease select food and beverage", "Select Menu");         
         }
-        
-        
-        
     }
     
     class DisplayChoicesButtonListener implements ActionListener{
@@ -94,9 +100,9 @@ public class RestaurantOrderController {
             String chosenFood=restaurantOrderView.getChosenFood();
             String chosenBeverage=restaurantOrderView.getChosenBeverage();
             if(!chosenFood.equals("-------- Select the food --------") || !chosenBeverage.equals("-------- Select the beverage --------")){
+                restaurantOrderView.displayDetailsChoices();
                 
-            } else restaurantOrderView.showErrorDialog("Please select food and beverage", "Select Menu");
-            System.out.println("CHOSEN MENU: "+chosenFood);            
+            } else restaurantOrderView.showErrorDialog("Hi "+restaurantOrderView.getCustomerName()+"\nPlease select food and beverage", "Select Menu");         
         }
         
     }
@@ -105,27 +111,14 @@ public class RestaurantOrderController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            ArrayList<String> allOrders=new ArrayList<>();
+            String chosenFood=restaurantOrderView.getChosenFood();
+            String chosenBeverage=restaurantOrderView.getChosenBeverage();
+            if(restaurantOrderModel.getAllOrders().size()!=0){
+                allOrders=restaurantOrderModel.getAllOrders();
+                restaurantOrderView.showAllOrders(allOrders);
+            } else restaurantOrderView.showErrorDialog("Hi "+restaurantOrderView.getCustomerName()+"\nPlease order at least one food or beverage", "Order Menu");
         }
-        
-    }
-    
-    class PrepareButtonListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        
-    }
-    
-    class BillButtonListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        
     }
     
     class ClearButtonListener implements ActionListener{
@@ -141,6 +134,9 @@ public class RestaurantOrderController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+//            Order newOrder = new Order();
+//        
+//            newOrder.addItem(menuItem);
             System.exit(0);
         }
         

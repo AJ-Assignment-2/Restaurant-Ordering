@@ -20,57 +20,95 @@ public class RestaurantOrderModel {
     private MenuItemAccessor menuItemAccessor;
     private MenuItem menuItem;
     private List<MenuItem> menuItems;
-    private String[] foodArray;
-    private String[] beverageArray;
+    private ArrayList<String> customerOrderList;
     
     
     public RestaurantOrderModel(){
         this.menuItemAccessor=new MenuItemAccessor();
         this.menuItem=new MenuItem();
         menuItems = menuItemAccessor.readMenuItems();
+        customerOrderList=new ArrayList<>();
     }
     
     public int getFoodSize(){
-        int count=0;
-        for(MenuItem s:menuItemAccessor.readMenuItems()){
-            if(s.getCategory()==MenuItemCategory.FOOD){
-                count++;
-            }
-        }
-        return count;
+        return getMenuWithCategory(MenuItemCategory.FOOD).size();
     }
     
     public int getBeverageSize(){
-        int count=0;
-        for(MenuItem s:menuItemAccessor.readMenuItems()){
-            if(s.getCategory()==MenuItemCategory.BEVERAGE){
-                count++;
-            }
-        }
-        return count;
+        return getMenuWithCategory(MenuItemCategory.BEVERAGE).size();
     }
     
     public List<MenuItem> getMenuWithType(MenuItemType type) {
-        List<MenuItem> foodsWithType = new ArrayList<>();
+        List<MenuItem> menusWithType = new ArrayList<>();
         
         menuItems.forEach(item -> {
-            if (item.getType() == type) foodsWithType.add(item);
+            if (item.getType() == type) menusWithType.add(item);
         });
         
-        return foodsWithType;
+        return menusWithType;
     }
     
     public List<MenuItem> getMenuWithCategory(MenuItemCategory category) {
-        List<MenuItem> foodsWithCategory = new ArrayList<>();
+        List<MenuItem> menusWithCategory = new ArrayList<>();
         
         menuItems.forEach(item -> {
-            if (item.getCategory() == category) foodsWithCategory.add(item);
+            if (item.getCategory() == category) menusWithCategory.add(item);
         });
         
-        return foodsWithCategory;
+        return menusWithCategory;
     }
 
-    public void setupTable(){
+    public List<MenuItem> getMenuWithTypeCategory(MenuItemCategory category, MenuItemType type) {
+        List<MenuItem> foodsWithTypeCategory = new ArrayList<>();
         
+        menuItems.forEach(item -> {
+            if (item.getCategory() == category && item.getType() == type) foodsWithTypeCategory.add(item);
+        });
+        
+        return foodsWithTypeCategory;
+    }
+    
+    public void setListCustomerOrder(String customerName, String customerTable, String foodOrder, String beverageOrder){
+        System.out.println("CN: "+customerName);
+        System.out.println("CT: "+customerTable);
+        System.out.println("FO: "+foodOrder);
+        System.out.println("BO: "+beverageOrder);
+        if(!foodOrder.equals("-------- Select the food --------") && !beverageOrder.equals("-------- Select the beverage --------")){
+            for(MenuItem menu: getMenuWithCategory(MenuItemCategory.FOOD)){
+                if(menu.getName().equals(foodOrder)){
+                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA111111111111111111111");
+                    customerOrderList.add(orderedCustomer(menu));
+                }
+            }
+            for(MenuItem menu: getMenuWithCategory(MenuItemCategory.BEVERAGE)){
+                if(menu.getName().equals(beverageOrder)){
+                    System.out.println("AAAAAAAAAAAAAAAAAAAAA22222222222222222222222222222222222");
+                    customerOrderList.add(orderedCustomer(menu));
+                }
+            }
+        }else if(beverageOrder.equals("-------- Select the beverage --------")){
+            for(MenuItem menu: getMenuWithCategory(MenuItemCategory.FOOD)){
+                if(menu.getName().equals(foodOrder)){
+                    System.out.println("BBBBBBBBBBBBBBB");
+                    customerOrderList.add(orderedCustomer(menu));
+                }
+            }
+        }else if(foodOrder.equals("-------- Select the food --------")){
+            for(MenuItem menu: getMenuWithCategory(MenuItemCategory.BEVERAGE)){
+                if(menu.getName().equals(beverageOrder)){
+                    System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                    customerOrderList.add(orderedCustomer(menu));
+                }
+            }
+        }
+        System.out.println("COList: "+customerOrderList);
+    }
+    
+    public ArrayList<String> getAllOrders(){
+        return customerOrderList;
+    }
+    
+    public String orderedCustomer(MenuItem menu){
+        return menu.getName()+","+menu.getEnergy()+","+menu.getProtean()+","+menu.getCarbohydrates()+","+menu.getFat()+","+menu.getFibre()+","+menu.getPrice();
     }
 }

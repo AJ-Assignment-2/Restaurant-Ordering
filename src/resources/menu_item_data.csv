@@ -2,7 +2,7 @@ MenuDesc,Meal Type,ItemName,Price (AUD),Energy(KJ),Protein (g),Carbohydrates (g)
 food,BreakFast,Egg scrambled,3,594,10.9,1.9,10.2,0,124
 food,BreakFast,Egg fried,3,745,13.6,0.3,13.7,0,125
 food,BreakFast,Muesli commercial toasted added nuts,4,1835,12.8,4.1,21.7,8.9,126
-food,BreakFast, Quinoa cooked in milk no added salt,3,489,5.9,16.3,3.1,1.4,127
+food,BreakFast,Quinoa cooked in milk no added salt,3,489,5.9,16.3,3.1,1.4,127
 food,BreakFast,rolled oats prepared with regular fat cows milk,4,522,5.4,15.1,4.8,1.7,128
 food,BreakFast,flakes of corn added nuts and vitamins B1 B2 B3,5,1587,6.3,75.2,3.6,10.5,129
 food,Lunch,Sandwich chicken & salad,7,653,10.4,18,4,2.6,130
@@ -34,6 +34,6 @@ Beverage,Lunch,Coffee flat white with skim cows milk,5,116,2.9,3.9,0.1,0,227
 Beverage,Lunch,Coffee macchiato with regular fat cows milk,8,54,0.7,1,0.7,0,228
 Beverage,Lunch,Cordial fruit cup stronger ,6,174,0,10.7,0,0,229
 Beverage,Lunch,Cordial lime or green regular,5,159,0,9.6,0,0,230
-Beverage,Dinner, apple juice commercial,5,178,0.1,10.9,0,0,231
+Beverage,Dinner,apple juice commercial,5,178,0.1,10.9,0,0,231
 Beverage,Dinner,orange juice commercial,5,176,0.2,10.4,0,0.1,232
 Beverage,Dinner,Juice carrot,4,133,0.8,5,0.1,4,233
