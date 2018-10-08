@@ -1,5 +1,8 @@
 package model.MenuItem;
 
+/**
+ * Represents the different categories of a menu item.
+ */
 public enum MenuItemCategory {
     FOOD,
     BEVERAGE;
