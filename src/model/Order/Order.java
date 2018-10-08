@@ -2,7 +2,6 @@ package model.Order;
 
 import model.MenuItem.MenuItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
