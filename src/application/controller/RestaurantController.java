@@ -1,6 +1,7 @@
 package application.controller;
 
-import application.model.OrderTableModel;
+import application.model.menuitem.MenuItemTableModel;
+import application.model.order.OrderTableModel;
 import application.model.RestaurantModel;
 import application.model.RestaurantModelObserver;
 import application.view.*;
@@ -12,6 +13,7 @@ import model.Order.OrderState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantController implements RestaurantModelObserver, RestaurantViewObserver {
@@ -31,6 +33,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         this.customerDetailsPanel = new CustomerDetailsPanel();
         this.menuItemSelectionPanel = new MenuItemSelectionPanel();
         this.orderStatusPanel = new OrderStatusPanel();
+        this.orderDetailsPanel = new OrderDetailsPanel();
 
         initView();
     }
@@ -41,15 +44,14 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         restaurantView.add(customerDetailsPanel, BorderLayout.NORTH);
         restaurantView.add(menuItemSelectionPanel);
 
-        // Create a container to fit two elements in the center
+        // Create a container to fit three panels in the center
         JPanel rootOrderPanelContainer = new JPanel();
-        JPanel orderPanelContainer = new JPanel();
 
         rootOrderPanelContainer.setLayout(new BoxLayout(rootOrderPanelContainer, BoxLayout.Y_AXIS));
-        orderPanelContainer.add(orderStatusPanel);
 
         rootOrderPanelContainer.add(menuItemSelectionPanel);
-        rootOrderPanelContainer.add(orderPanelContainer);
+        rootOrderPanelContainer.add(orderStatusPanel);
+        rootOrderPanelContainer.add(orderDetailsPanel);
 
         restaurantView.add(rootOrderPanelContainer);
 
@@ -60,7 +62,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         customerDetailsPanel.addRestaurantViewObserver(this);
         menuItemSelectionPanel.addRestaurantViewObserver(this);
         orderStatusPanel.addRestaurantViewObserver(this);
-
+        orderDetailsPanel.addRestaurantViewObserver(this);
     }
 
     @Override
@@ -92,8 +94,16 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
     }
 
     @Override
-    public void displayOderButtonPressed() {
+    public void displayOrderButtonPressed() {
+        JTable waitingOrdersTable = orderStatusPanel.getWaitingOrdersTable();
+        OrderTableModel orderTableModel = (OrderTableModel)waitingOrdersTable.getModel();
+        Order selectedOrder = orderTableModel.getOrder(waitingOrdersTable.getSelectedRow());
 
+        JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
+
+        ((MenuItemTableModel)orderItemDetailsTable.getModel())
+                .setMenuItems(new ArrayList<>(selectedOrder.getMenuItemSelections().keySet()));
+        ((MenuItemTableModel)orderItemDetailsTable.getModel()).fireTableDataChanged();
     }
 
     @Override

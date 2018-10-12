@@ -1,36 +1,40 @@
-package application.model;
+package application.model.menuitem;
 
-import model.Order.Order;
+import model.MenuItem.MenuItem;
 
-import javax.swing.table.AbstractTableModel;
 import java.util.List;
+import javax.swing.table.AbstractTableModel;
 
-public class OrderTableModel extends AbstractTableModel {
+public class MenuItemTableModel extends AbstractTableModel {
+
     private String[] columnNames = {
-            "Customer Name",
-            "Table Number"
+        "Name",
+        "Price (AUD)",
+        "Energy (kj)",
+        "Protein (g)",
+        "Carbohydrates (g)",
+        "Fat (g)",
+        "Fibre (g)",
+        "Type",
+        "Category"
     };
 
-    private List<Order> orders;
+    private List<MenuItem> menuItems;
 
-    public OrderTableModel(List<Order> orders) {
-        this.orders = orders;
-    }
-    
-    public List<Order> getOrders() {
-        return orders;
+    public MenuItemTableModel(List<MenuItem> menuItems) {
+        this.menuItems = menuItems;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Order getOrder(int row) {
-        if (orders != null) {
-            return orders.get(row);
+    public MenuItem getItem(int row) {
+        if (menuItems != null) {
+            return menuItems.get(row);
         } else {
             return null;
         }
+    }
+
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = menuItems;
     }
 
     /**
@@ -61,7 +65,7 @@ public class OrderTableModel extends AbstractTableModel {
      */
     @Override
     public int getRowCount() {
-        return orders.size();
+        return menuItems.size();
     }
 
     /**
@@ -76,10 +80,10 @@ public class OrderTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns boolean representing if the cell is editable.
-     * Cells are never editable in this implementation.
+     * Returns boolean representing if the cell is editable. Cells are never
+     * editable in this implementation.
      *
-     * @param row    The row of the cell.
+     * @param row The row of the cell.
      * @param column The column of the cell.
      * @return A boolean representing if it can be edited. Always false.
      */
@@ -91,20 +95,32 @@ public class OrderTableModel extends AbstractTableModel {
     /**
      * Returns the value to display in a particular cell.
      *
-     * @param row    The row of the cell.
+     * @param row The row of the cell.
      * @param column The column of the cell.
      * @return The data for the cell.
      */
     @Override
     public Object getValueAt(int row, int column) {
-        Order order = orders.get(row);
+        MenuItem menuItem = menuItems.get(row);
         switch (column) {
             case 0:
-                return order.getCustomerName();
+                return menuItem.getName();
             case 1:
-                return order.getTableNumber();
+                return menuItem.getPrice();
             case 2:
-                return order.getState();
+                return menuItem.getEnergy();
+            case 3:
+                return menuItem.getProtean();
+            case 4:
+                return menuItem.getCarbohydrates();
+            case 5:
+                return menuItem.getFat();
+            case 6:
+                return menuItem.getFibre();
+            case 7:
+                return menuItem.getType();
+            case 8:
+                return menuItem.getCategory();
             default:
                 return "undefined";
         }

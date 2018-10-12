@@ -34,6 +34,9 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
         displayChoicesButton.addActionListener(event ->
                 observers.stream().forEach(RestaurantViewObserver::displayChoicesButtonPressed));
 
+        displayOrderButton.addActionListener(event ->
+                observers.stream().forEach(RestaurantViewObserver::displayOrderButtonPressed));
+
         prepareButton.addActionListener(event ->
                 observers.stream().forEach(RestaurantViewObserver::prepareButtonPressed));
 

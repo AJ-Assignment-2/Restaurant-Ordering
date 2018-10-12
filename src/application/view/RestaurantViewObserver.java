@@ -5,7 +5,7 @@ import model.MenuItem.MenuItemType;
 public interface RestaurantViewObserver {
     void enterDataButtonPressed();
     void displayChoicesButtonPressed();
-    void displayOderButtonPressed();
+    void displayOrderButtonPressed();
     void prepareButtonPressed();
     void billButtonPressed();
     void clearDisplayButtonPressed();
