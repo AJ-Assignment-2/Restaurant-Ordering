@@ -99,7 +99,7 @@ public class Controller {
 
         private final MenuItemType type;
 
-        public MealTypeListener(MenuItemType type) {
+        MealTypeListener(MenuItemType type) {
             this.type = type;
         }
 
