@@ -270,7 +270,11 @@ public class Views extends JFrame {
         return radioButtonGroup;
     }
 
-    public void buildTable(OrderState state, JTable table) { 
+    public void buildTable(OrderState state, JTable table) {
+        
+        OrderTableModel model = (OrderTableModel) table.getModel();
+        
+        
         switch (state) {
             case WAITING:
                 if (scrollableWaitingOrdersTextArea != null) {

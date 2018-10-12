@@ -34,13 +34,9 @@ public class TableRunnable implements Runnable {
             while (getView() != null) {
                 try {
                     List<Order> orders = getModel().getOrders();
-                    
-                    if(!orders.isEmpty()) {
-                        System.out.println(orders.get(0).getState().name());
-                    }
 
                     for (OrderState state : OrderState.values()) {
-                        OrderTableModel model = new OrderTableModel(orders.stream().filter(o -> o.getState() == null).collect(Collectors.toList()));
+                        OrderTableModel model = new OrderTableModel(orders.stream().filter(o -> o.getState() == state).collect(Collectors.toList()));
 
                         if (getView().getTable(state) != null) {
                             OrderTableModel m = (OrderTableModel) getView().getTable(state).getModel();
