@@ -1,9 +1,12 @@
-package RestaurantOrderScreen;
+package screen;
 
+import java.awt.Dimension;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 public class View extends javax.swing.JFrame {
@@ -41,7 +44,7 @@ public class View extends javax.swing.JFrame {
         lblBeverage = new javax.swing.JLabel();
         pnlOrder = new javax.swing.JPanel();
         scrollWaiting = new javax.swing.JScrollPane();
-        scrollWaiting1 = new javax.swing.JScrollPane();
+        scrollServed = new javax.swing.JScrollPane();
         lblWaiting = new javax.swing.JLabel();
         lblWaiting1 = new javax.swing.JLabel();
         pnlButtons = new javax.swing.JPanel();
@@ -167,7 +170,7 @@ public class View extends javax.swing.JFrame {
                     .addGroup(pnlOrderLayout.createSequentialGroup()
                         .addComponent(scrollWaiting, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scrollWaiting1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(scrollServed, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOrderLayout.createSequentialGroup()
                         .addComponent(lblWaiting, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,7 +187,7 @@ public class View extends javax.swing.JFrame {
                     .addComponent(lblWaiting))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollWaiting1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrollServed, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(scrollWaiting, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -198,6 +201,7 @@ public class View extends javax.swing.JFrame {
         btnDisplayOrder.setText("Display Order");
 
         btnClear.setText("Clear Display");
+        btnClear.setEnabled(false);
 
         btnBill.setText("Bill");
 
@@ -327,6 +331,35 @@ public class View extends javax.swing.JFrame {
         return txtTable;
     }
 
+    public JScrollPane getScrollServed() {
+        return scrollServed;
+    }
+
+    public JScrollPane getScrollWaiting() {
+        return scrollWaiting;
+    }
+
+    public void setScrollWaiting(JScrollPane pane) {
+        System.out.println("Added: " + pane);
+        this.scrollWaiting = pane;
+    }
+
+    public void displayOrderTable(JTable table) {
+        if (getScrollWaiting() != null) {
+            this.remove(getScrollWaiting());
+        }
+
+        revalidate();
+        repaint();
+        setScrollWaiting(new JScrollPane(table));
+        getScrollWaiting().setPreferredSize(new Dimension(0, 200));
+        table.getColumnModel().getColumn(0).setPreferredWidth(350);
+        table.getColumnModel().getColumn(4).setPreferredWidth(125);
+        this.add(getScrollWaiting());
+        revalidate();
+        repaint();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrpMealType;
     private javax.swing.JButton btnBill;
@@ -352,8 +385,8 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JRadioButton radBreakfast;
     private javax.swing.JRadioButton radDinner;
     private javax.swing.JRadioButton radLunch;
+    private javax.swing.JScrollPane scrollServed;
     private javax.swing.JScrollPane scrollWaiting;
-    private javax.swing.JScrollPane scrollWaiting1;
     private javax.swing.JTextField txtCustomerName;
     private javax.swing.JTextField txtTable;
     // End of variables declaration//GEN-END:variables

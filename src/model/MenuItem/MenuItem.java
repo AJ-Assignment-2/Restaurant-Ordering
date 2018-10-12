@@ -4,6 +4,7 @@ package model.MenuItem;
  * Object to represent a single menu item.
  */
 public class MenuItem {
+    
     private String name;
     private MenuItemType type;
     private MenuItemCategory category;
