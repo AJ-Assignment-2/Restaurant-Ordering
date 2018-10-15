@@ -1,4 +1,4 @@
-package services.MenuItemService;
+package application.services.MenuItemService;
 
 import application.model.menuitem.MenuItem;
 import application.model.menuitem.MenuItemCategory;

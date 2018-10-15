@@ -1,7 +1,6 @@
 package application.view;
 
 import application.model.menuitem.MenuItemTableModel;
-import model.MenuItem.MenuItem;
 
 import javax.swing.*;
 import java.util.ArrayList;

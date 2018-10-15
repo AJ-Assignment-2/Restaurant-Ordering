@@ -4,7 +4,7 @@ import application.model.menuitem.MenuItem;
 import application.model.menuitem.MenuItemCategory;
 import application.model.menuitem.MenuItemType;
 import application.model.order.Order;
-import services.MenuItemService.MenuItemAccessor;
+import application.services.MenuItemService.MenuItemAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
