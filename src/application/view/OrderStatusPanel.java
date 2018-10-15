@@ -1,7 +1,7 @@
 package application.view;
 
 import application.model.RestaurantModelObserver;
-import model.Order.Order;
+import application.model.order.Order;
 import application.model.order.OrderTableModel;
 
 import javax.swing.*;

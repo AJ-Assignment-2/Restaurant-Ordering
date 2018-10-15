@@ -4,12 +4,13 @@ import application.model.menuitem.MenuItemTableModel;
 import application.model.order.OrderTableModel;
 import application.model.RestaurantModel;
 import application.model.RestaurantModelObserver;
+import application.model.menuitem.MenuItemCategory;
+import application.model.menuitem.MenuItemType;
+import application.model.menuitem.MenuItem;
+import application.model.order.Order;
+import application.model.order.OrderState;
+import application.utilities.Validation;
 import application.view.*;
-import model.MenuItem.MenuItem;
-import model.MenuItem.MenuItemCategory;
-import model.MenuItem.MenuItemType;
-import model.Order.Order;
-import model.Order.OrderState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantController implements RestaurantModelObserver, RestaurantViewObserver {
+
     private RestaurantModel restaurantModel;
     private JPanel restaurantView;
 
@@ -67,49 +69,99 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
     @Override
     public void enterDataButtonPressed() {
-        Order order = restaurantModel.getOrder(Integer.parseInt(customerDetailsPanel.getTableNumberTextArea().getText()));
+        String customerName = customerDetailsPanel.getCustomerNameTextArea().getText();
+        String tableNumber = customerDetailsPanel.getTableNumberTextArea().getText();
 
+        // Check if inputs are empty
+        if (customerName.isEmpty() || tableNumber.isEmpty()) {
+            JOptionPane.showMessageDialog(restaurantView, "Please enter your name or your table number", "Incorrect Name or Table Number", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Check if data types are correct
+        if (!Validation.isAlpha(customerName)) {
+            JOptionPane.showMessageDialog(restaurantView, "Please enter a valid name", "Invalid Customer Name", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!Validation.isNumeric(tableNumber)) {
+            JOptionPane.showMessageDialog(restaurantView, "Please enter a valid table number", "Invalid Table Number", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Check if a meal type is selected
+        if (customerDetailsPanel.getButtonGroup().getSelection() == null) {
+            JOptionPane.showMessageDialog(restaurantView, "Please select a meal type", "Invalid Meal Type", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Order order = restaurantModel.getOrder(Integer.parseInt(tableNumber));
         if (order == null) {
-            String customerName = customerDetailsPanel.getCustomerNameTextArea().getText();
-            String tableNumber = customerDetailsPanel.getTableNumberTextArea().getText();
-
             order = new Order();
             order.setCustomerName(customerName);
             order.setState(OrderState.WAITING);
             order.setTableNumber(Integer.parseInt(tableNumber));
         }
 
-        MenuItem selectedFood = (MenuItem)menuItemSelectionPanel.getFoodComboBox().getModel().getSelectedItem();
-        MenuItem selectedBeverage = (MenuItem)menuItemSelectionPanel.getBeverageComboBox().getModel().getSelectedItem();
+        MenuItem selectedFood = (MenuItem) menuItemSelectionPanel.getFoodComboBox().getModel().getSelectedItem();
+        MenuItem selectedBeverage = (MenuItem) menuItemSelectionPanel.getBeverageComboBox().getModel().getSelectedItem();
 
         order.addItem(selectedBeverage);
         order.addItem(selectedFood);
 
         restaurantModel.storeOrder(order);
+        commandPanel.getClearDisplayButton().setEnabled(true);
     }
 
     @Override
     public void displayChoicesButtonPressed() {
+        List<MenuItem> focusedItems = new ArrayList<>();
+        focusedItems.add((MenuItem) menuItemSelectionPanel.getFoodComboBox().getSelectedItem());
+        focusedItems.add((MenuItem) menuItemSelectionPanel.getBeverageComboBox().getSelectedItem());
 
+        JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
+        ((MenuItemTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
+        ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
     }
 
     @Override
     public void displayOrderButtonPressed() {
-        JTable waitingOrdersTable = orderStatusPanel.getWaitingOrdersTable();
-        OrderTableModel orderTableModel = (OrderTableModel)waitingOrdersTable.getModel();
-        Order selectedOrder = orderTableModel.getOrder(waitingOrdersTable.getSelectedRow());
+        if (orderStatusPanel.getWaitingOrdersTable().getSelectedRow() == -1
+                && orderStatusPanel.getServedOrdersTable().getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(restaurantView, "Please select a order to display", "Invalid Order Selection", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // assign values depending on table that was clicked
+        JTable table = null;
+        OrderTableModel model = null;
+        Order order = null;
+        if (orderStatusPanel.getWaitingOrdersTable().getSelectedRow() != -1) {
+            table = orderStatusPanel.getWaitingOrdersTable();
+            model = (OrderTableModel) table.getModel();
+            order = model.getOrder(table.getSelectedRow());
+        } else if (orderStatusPanel.getServedOrdersTable().getSelectedRow() != -1) {
+            table = orderStatusPanel.getServedOrdersTable();
+            model = (OrderTableModel) table.getModel();
+            order = model.getOrder(table.getSelectedRow());
+        }
 
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
 
-        ((MenuItemTableModel)orderItemDetailsTable.getModel())
-                .setMenuItems(new ArrayList<>(selectedOrder.getMenuItemSelections().keySet()));
-        ((MenuItemTableModel)orderItemDetailsTable.getModel()).fireTableDataChanged();
+        ((MenuItemTableModel) orderItemDetailsTable.getModel())
+                .setMenuItems(new ArrayList<>(order.getMenuItemSelections().keySet()));
+        ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
     }
 
     @Override
     public void prepareButtonPressed() {
+        if (orderStatusPanel.getWaitingOrdersTable().getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(restaurantView, "Please select a order to prepare", "Invalid Prepare Selection", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         JTable orderTable = orderStatusPanel.getWaitingOrdersTable();
-        OrderTableModel orderTableModel = (OrderTableModel)orderTable.getModel();
+        OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
         Order selectedOrder = orderTableModel.getOrder(orderTable.getSelectedRow());
         selectedOrder.setState(OrderState.SERVED);
         restaurantModel.storeOrder(selectedOrder);
@@ -117,8 +169,13 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
     @Override
     public void billButtonPressed() {
+        if (orderStatusPanel.getServedOrdersTable().getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(restaurantView, "Please select a order to bill", "Invalid Bill Selection", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         JTable orderTable = orderStatusPanel.getServedOrdersTable();
-        OrderTableModel orderTableModel = (OrderTableModel)orderTable.getModel();
+        OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
         Order selectedOrder = orderTableModel.getOrder(orderTable.getSelectedRow());
         selectedOrder.setState(OrderState.BILLED);
         restaurantModel.storeOrder(selectedOrder);
@@ -126,12 +183,25 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
     @Override
     public void clearDisplayButtonPressed() {
+        MenuItemTableModel menuItemTableModel = (MenuItemTableModel) orderDetailsPanel.getOrderItemDetailsTable().getModel();
+        menuItemTableModel.setMenuItems(new ArrayList<>());
+        menuItemTableModel.fireTableDataChanged();
 
+        customerDetailsPanel.getCustomerNameTextArea().setText("");
+        customerDetailsPanel.getTableNumberTextArea().setText("");
+
+        orderStatusPanel.getWaitingOrdersTable().clearSelection();
+        orderStatusPanel.getServedOrdersTable().clearSelection();
+        
+        customerDetailsPanel.getButtonGroup().clearSelection();
+
+//        commandPanel.getSubmitOrderButton().setEnabled(false);
+//        commandPanel.getClearDisplayButton().setEnabled(false);
     }
 
     @Override
     public void quitButtonPressed() {
-
+        System.exit(0);
     }
 
     @Override
@@ -152,11 +222,12 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
     }
 
     private class MenuItemNameCellRenderer extends DefaultListCellRenderer {
+
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (value instanceof model.MenuItem.MenuItem) {
-                model.MenuItem.MenuItem item = (MenuItem) value;
+            if (value instanceof MenuItem) {
+                MenuItem item = (MenuItem) value;
                 setText(item.getName());
             }
             return this;

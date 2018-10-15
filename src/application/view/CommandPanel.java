@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandPanel extends JPanel implements ObservableRestaurantView {
+
     private List<RestaurantViewObserver> observers;
 
     private JButton enterDataButton;
@@ -28,26 +29,26 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
         clearDisplayButton = new JButton("Clear Display");
         quitButton = new JButton("Quit");
 
-        enterDataButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::enterDataButtonPressed));
+        enterDataButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::enterDataButtonPressed));
 
-        displayChoicesButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::displayChoicesButtonPressed));
+        displayChoicesButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::displayChoicesButtonPressed));
 
-        displayOrderButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::displayOrderButtonPressed));
+        displayOrderButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::displayOrderButtonPressed));
 
-        prepareButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::prepareButtonPressed));
+        prepareButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::prepareButtonPressed));
 
-        billButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::billButtonPressed));
+        billButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::billButtonPressed));
 
-        clearDisplayButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::clearDisplayButtonPressed));
+        clearDisplayButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::clearDisplayButtonPressed));
 
-        quitButton.addActionListener(event ->
-                observers.stream().forEach(RestaurantViewObserver::quitButtonPressed));
+        quitButton.addActionListener(event
+                -> observers.stream().forEach(RestaurantViewObserver::quitButtonPressed));
 
         add(enterDataButton);
         add(displayChoicesButton);
@@ -56,6 +57,14 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
         add(billButton);
         add(clearDisplayButton);
         add(quitButton);
+    }
+
+    public JButton getSubmitOrderButton() {
+        return enterDataButton;
+    }
+
+    public JButton getClearDisplayButton() {
+        return clearDisplayButton;
     }
 
     @Override

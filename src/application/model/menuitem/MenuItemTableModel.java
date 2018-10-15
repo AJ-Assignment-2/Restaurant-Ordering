@@ -1,7 +1,5 @@
 package application.model.menuitem;
 
-import model.MenuItem.MenuItem;
-
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 

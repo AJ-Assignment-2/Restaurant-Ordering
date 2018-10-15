@@ -1,7 +1,5 @@
 package application.model.order;
 
-import model.Order.Order;
-
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 

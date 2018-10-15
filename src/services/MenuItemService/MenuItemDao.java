@@ -1,7 +1,6 @@
 package services.MenuItemService;
 
-import model.MenuItem.MenuItem;
-
+import application.model.menuitem.MenuItem;
 import java.util.List;
 
 public interface MenuItemDao {

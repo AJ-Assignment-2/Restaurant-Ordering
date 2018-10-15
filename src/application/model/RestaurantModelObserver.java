@@ -1,7 +1,6 @@
 package application.model;
 
-import model.Order.Order;
-
+import application.model.order.Order;
 import java.util.List;
 
 public interface RestaurantModelObserver {

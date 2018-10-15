@@ -1,10 +1,8 @@
 package services.MenuItemService;
 
-import model.MenuItem.MenuItem;
-
-import model.MenuItem.MenuItemCategory;
-import model.MenuItem.MenuItemType;
-
+import application.model.menuitem.MenuItem;
+import application.model.menuitem.MenuItemCategory;
+import application.model.menuitem.MenuItemType;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +17,8 @@ import java.util.logging.Logger;
  * A class used to access menu items in the database.
  */
 public class MenuItemAccessor implements MenuItemDao {
-    private static final Logger LOGGER = Logger.getLogger( MenuItemAccessor.class.getName() );
+
+    private static final Logger LOGGER = Logger.getLogger(MenuItemAccessor.class.getName());
 
     private static final String TABLE_NAME = "MenuItem";
 
@@ -34,17 +33,17 @@ public class MenuItemAccessor implements MenuItemDao {
     private static final String COLUMN_CATEGORY = "category";
     private static final String COLUMN_TYPE = "type";
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, " +
-            COLUMN_NAME + " VARCHAR(100) NOT NULL, " +
-            COLUMN_PRICE + " INTEGER NOT NULL, " +
-            COLUMN_ENERGY + " INTEGER NOT NULL, " +
-            COLUMN_PROTEAN + " DECIMAL(4,2) NOT NULL, " +
-            COLUMN_CARBOHYDRATES + " DECIMAL(4,2) NOT NULL, " +
-            COLUMN_FAT + " DECIMAL(4,2) NOT NULL, " +
-            COLUMN_FIBRE + " DECIMAL(4,2) NOT NULL, " +
-            COLUMN_TYPE + " VARCHAR(50) NOT NULL, " +
-            COLUMN_CATEGORY + " VARCHAR(50) NOT NULL )";
+    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+            + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, "
+            + COLUMN_NAME + " VARCHAR(100) NOT NULL, "
+            + COLUMN_PRICE + " INTEGER NOT NULL, "
+            + COLUMN_ENERGY + " INTEGER NOT NULL, "
+            + COLUMN_PROTEAN + " DECIMAL(4,2) NOT NULL, "
+            + COLUMN_CARBOHYDRATES + " DECIMAL(4,2) NOT NULL, "
+            + COLUMN_FAT + " DECIMAL(4,2) NOT NULL, "
+            + COLUMN_FIBRE + " DECIMAL(4,2) NOT NULL, "
+            + COLUMN_TYPE + " VARCHAR(50) NOT NULL, "
+            + COLUMN_CATEGORY + " VARCHAR(50) NOT NULL )";
 
     private final Connection connection;
 
@@ -120,17 +119,17 @@ public class MenuItemAccessor implements MenuItemDao {
     }
 
     /**
-     * Inserts a given menu item into the database.
-     * A unique ID for the menu item must be supplied.
+     * Inserts a given menu item into the database. A unique ID for the menu
+     * item must be supplied.
      *
      * @param itemToAdd The menu item to add to the database.
      */
     @Override
     public void createMenuItem(MenuItem itemToAdd) {
-        String sql = "INSERT INTO " + TABLE_NAME +" (" +
-                COLUMN_ID + ", " + COLUMN_NAME + ", " + COLUMN_PRICE + ", " + COLUMN_ENERGY + ", " + COLUMN_PROTEAN + ", " +
-                COLUMN_CARBOHYDRATES + ", " + COLUMN_FAT + ", " + COLUMN_FIBRE + ", " + COLUMN_CATEGORY + ", " + COLUMN_TYPE + ")" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO " + TABLE_NAME + " ("
+                + COLUMN_ID + ", " + COLUMN_NAME + ", " + COLUMN_PRICE + ", " + COLUMN_ENERGY + ", " + COLUMN_PROTEAN + ", "
+                + COLUMN_CARBOHYDRATES + ", " + COLUMN_FAT + ", " + COLUMN_FIBRE + ", " + COLUMN_CATEGORY + ", " + COLUMN_TYPE + ")"
+                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -152,7 +151,8 @@ public class MenuItemAccessor implements MenuItemDao {
     }
 
     /**
-     * Create the menu item table. If the table exists an exception is thrown and caught.
+     * Create the menu item table. If the table exists an exception is thrown
+     * and caught.
      */
     private void createMenuItemTable() {
         try {
@@ -164,7 +164,8 @@ public class MenuItemAccessor implements MenuItemDao {
     }
 
     /**
-     * Populate the menu item table with values contained in the menu_item_data.csv file.
+     * Populate the menu item table with values contained in the
+     * menu_item_data.csv file.
      */
     private void populateMenuItemTable() {
         BufferedReader reader;

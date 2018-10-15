@@ -1,6 +1,6 @@
 package application.view;
 
-import model.MenuItem.MenuItemType;
+import application.model.menuitem.MenuItemType;
 
 public interface RestaurantViewObserver {
     void enterDataButtonPressed();

@@ -1,9 +1,7 @@
 package application.view;
 
-import model.MenuItem.MenuItemCategory;
-import model.MenuItem.MenuItemType;
-import screen.Controller;
 
+import application.model.menuitem.MenuItemType;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -75,7 +73,11 @@ public class CustomerDetailsPanel extends JPanel implements ObservableRestaurant
     public JTextArea getTableNumberTextArea() {
         return tableNumberTextArea;
     }
-
+    
+    public ButtonGroup getButtonGroup() {
+        return radioButtonGroup;
+    }
+    
     @Override
     public void addRestaurantViewObserver(RestaurantViewObserver observer) {
         observers.add(observer);

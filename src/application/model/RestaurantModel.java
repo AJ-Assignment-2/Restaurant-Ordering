@@ -1,9 +1,9 @@
 package application.model;
 
-import model.MenuItem.MenuItem;
-import model.MenuItem.MenuItemCategory;
-import model.MenuItem.MenuItemType;
-import model.Order.Order;
+import application.model.menuitem.MenuItem;
+import application.model.menuitem.MenuItemCategory;
+import application.model.menuitem.MenuItemType;
+import application.model.order.Order;
 import services.MenuItemService.MenuItemAccessor;
 
 import java.util.ArrayList;
