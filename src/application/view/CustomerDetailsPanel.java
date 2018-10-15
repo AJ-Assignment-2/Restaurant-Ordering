@@ -30,7 +30,8 @@ public class CustomerDetailsPanel extends JPanel implements ObservableRestaurant
     public CustomerDetailsPanel() {
         observers = new ArrayList<>();
 
-        setLayout(new GridLayout(1, 3));
+        setLayout(new GridLayout(1, 2));
+        setBorder(BorderFactory.createTitledBorder("Customer Details"));
         customerNamePanel = new JPanel();
         tablePanel = new JPanel();
         mealPanel = new JPanel();

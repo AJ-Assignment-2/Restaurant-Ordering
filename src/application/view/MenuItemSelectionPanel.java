@@ -1,10 +1,12 @@
 package application.view;
 
+import java.awt.GridLayout;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuItemSelectionPanel extends JPanel implements ObservableRestaurantView {
+
     private List<RestaurantViewObserver> observers;
 
     private JLabel foodLabel;
@@ -14,6 +16,9 @@ public class MenuItemSelectionPanel extends JPanel implements ObservableRestaura
 
     public MenuItemSelectionPanel() {
         observers = new ArrayList<>();
+
+        setLayout(new GridLayout(1, 4));
+        setBorder(BorderFactory.createTitledBorder("Choose Menu Items"));
 
         foodLabel = new JLabel("Food");
         foodComboBox = new JComboBox<>();

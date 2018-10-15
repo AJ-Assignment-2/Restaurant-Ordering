@@ -19,6 +19,8 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
 
     public CommandPanel() {
         observers = new ArrayList<>();
+        
+        setBorder(BorderFactory.createTitledBorder("Command Buttons"));
         setLayout(new GridLayout(1, 7, 10, 10));
 
         enterDataButton = new JButton("Enter Data");
