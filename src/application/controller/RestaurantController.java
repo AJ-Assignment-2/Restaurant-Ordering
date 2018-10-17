@@ -1,12 +1,11 @@
 package application.controller;
 
-import application.model.menuitem.MenuItemTableModel;
+import application.model.ColumnWidthUtil;
+import application.model.menuitem.*;
+import application.model.menuitem.MenuItem;
 import application.model.order.OrderTableModel;
 import application.model.RestaurantModel;
 import application.model.RestaurantModelObserver;
-import application.model.menuitem.MenuItemCategory;
-import application.model.menuitem.MenuItemType;
-import application.model.menuitem.MenuItem;
 import application.model.order.Order;
 import application.model.order.OrderState;
 import application.utilities.Validation;
@@ -122,6 +121,8 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
         ((MenuItemTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
         ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+
+        ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
     @Override
@@ -146,11 +147,26 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             order = model.getOrder(table.getSelectedRow());
         }
 
+
+
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
 
-        ((MenuItemTableModel) orderItemDetailsTable.getModel())
-                .setMenuItems(new ArrayList<>(order.getMenuItemSelections().keySet()));
-        ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+        List<MenuItem> selectedOrderMenuItems = new ArrayList<>();
+
+        for (MenuItem item : order.getMenuItemSelections().keySet()) {
+            int quantity = order.getMenuItemSelections().get(item);
+
+            for (int i = 0; i < quantity; i++) {
+                selectedOrderMenuItems.add(item);
+            }
+        }
+
+        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel())
+                .setMenuItems(selectedOrderMenuItems);
+
+        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+
+        ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
     @Override
