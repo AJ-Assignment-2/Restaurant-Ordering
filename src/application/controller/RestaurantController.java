@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.model.ColumnWidthUtil;
 import application.model.menuitem.MenuItemTableModel;
 import application.model.order.OrderTableModel;
 import application.model.RestaurantModel;
@@ -159,10 +160,13 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
                 selectedOrderMenuItems.add(item);
             }
         }
-        
+
         ((MenuItemTableModel) orderItemDetailsTable.getModel())
                 .setMenuItems(selectedOrderMenuItems);
+
         ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+
+        ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
     @Override
