@@ -19,7 +19,7 @@ public class OrderDetailsPanel extends JPanel implements ObservableRestaurantVie
 
         orderItemDetailsTable = new JTable(new MenuItemTotalsTableModel(new ArrayList<>()));
         tableContainer = new JScrollPane(orderItemDetailsTable);
-        tableContainer.setPreferredSize(new Dimension(900, 400));
+        tableContainer.setPreferredSize(new Dimension(950, 300));
 
         add(tableContainer);
     }
