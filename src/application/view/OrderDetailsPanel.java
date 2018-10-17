@@ -3,6 +3,7 @@ package application.view;
 import application.model.menuitem.MenuItemTableModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class OrderDetailsPanel extends JPanel implements ObservableRestaurantVie
 
         orderItemDetailsTable = new JTable(new MenuItemTableModel(new ArrayList<>()));
         tableContainer = new JScrollPane(orderItemDetailsTable);
+        tableContainer.setPreferredSize(new Dimension(800, 400));
 
         add(tableContainer);
     }
