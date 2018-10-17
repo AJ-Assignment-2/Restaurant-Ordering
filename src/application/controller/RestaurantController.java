@@ -146,10 +146,22 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             order = model.getOrder(table.getSelectedRow());
         }
 
+
+
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
 
+        List<MenuItem> selectedOrderMenuItems = new ArrayList<>();
+
+        for (MenuItem item : order.getMenuItemSelections().keySet()) {
+            int quantity = order.getMenuItemSelections().get(item);
+
+            for (int i = 0; i < quantity; i++) {
+                selectedOrderMenuItems.add(item);
+            }
+        }
+        
         ((MenuItemTableModel) orderItemDetailsTable.getModel())
-                .setMenuItems(new ArrayList<>(order.getMenuItemSelections().keySet()));
+                .setMenuItems(selectedOrderMenuItems);
         ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
     }
 
