@@ -1,14 +1,14 @@
-package model.Order;
+package application.model.order;
 
 import application.model.menuitem.MenuItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Represents a customer's order with menu items.
  */
 public class Order {
+
     private int id;
     private String customerName;
     private HashMap<MenuItem, Integer> menuItemSelections;
@@ -61,8 +61,8 @@ public class Order {
     }
 
     /**
-     * Add a menu item to the HashMap of selections.
-     * If the item is already added, increment the HashMap key.
+     * Add a menu item to the HashMap of selections. If the item is already
+     * added, increment the HashMap key.
      *
      * @param item The item to add to the HashMap.
      */
