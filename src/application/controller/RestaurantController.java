@@ -91,7 +91,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             }
         });
 
-      orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
+        orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -151,13 +151,19 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
     @Override
     public void displayChoicesButtonPressed() {
+        if (menuItemSelectionPanel.getFoodComboBox().getSelectedItem() == null
+                && menuItemSelectionPanel.getBeverageComboBox().getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(restaurantView, "Please select a food to display", "Invalid Order Selection", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         List<MenuItem> focusedItems = new ArrayList<>();
         focusedItems.add((MenuItem) menuItemSelectionPanel.getFoodComboBox().getSelectedItem());
         focusedItems.add((MenuItem) menuItemSelectionPanel.getBeverageComboBox().getSelectedItem());
 
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
-        ((MenuItemTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
-        ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
+        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
 
         ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
@@ -249,7 +255,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
     @Override
     public void clearDisplayButtonPressed() {
-        MenuItemTableModel menuItemTableModel = (MenuItemTableModel) orderDetailsPanel.getOrderItemDetailsTable().getModel();
+        MenuItemTotalsTableModel menuItemTableModel = (MenuItemTotalsTableModel) orderDetailsPanel.getOrderItemDetailsTable().getModel();
         menuItemTableModel.setMenuItems(new ArrayList<>());
         menuItemTableModel.fireTableDataChanged();
 
