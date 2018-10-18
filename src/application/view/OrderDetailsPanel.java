@@ -1,8 +1,10 @@
 package application.view;
 
 import application.model.menuitem.MenuItemTableModel;
+import application.model.menuitem.MenuItemTotalsTableModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,9 @@ public class OrderDetailsPanel extends JPanel implements ObservableRestaurantVie
     public OrderDetailsPanel() {
         observers = new ArrayList<>();
 
-        orderItemDetailsTable = new JTable(new MenuItemTableModel(new ArrayList<>()));
+        orderItemDetailsTable = new JTable(new MenuItemTotalsTableModel(new ArrayList<>()));
         tableContainer = new JScrollPane(orderItemDetailsTable);
+        tableContainer.setPreferredSize(new Dimension(950, 300));
 
         add(tableContainer);
     }

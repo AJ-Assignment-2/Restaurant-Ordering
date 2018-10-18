@@ -19,7 +19,7 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
 
     public CommandPanel() {
         observers = new ArrayList<>();
-        
+
         setBorder(BorderFactory.createTitledBorder("Command Buttons"));
         setLayout(new GridLayout(1, 7, 10, 10));
 
@@ -67,6 +67,14 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
 
     public JButton getClearDisplayButton() {
         return clearDisplayButton;
+    }
+
+    public JButton getPrepareButton() {
+        return prepareButton;
+    }
+
+    public JButton getBillButton() {
+        return billButton;
     }
 
     @Override

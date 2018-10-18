@@ -1,12 +1,11 @@
 package application.controller;
 
-import application.model.menuitem.MenuItemTableModel;
+import application.model.ColumnWidthUtil;
+import application.model.menuitem.*;
+import application.model.menuitem.MenuItem;
 import application.model.order.OrderTableModel;
 import application.model.RestaurantModel;
 import application.model.RestaurantModelObserver;
-import application.model.menuitem.MenuItemCategory;
-import application.model.menuitem.MenuItemType;
-import application.model.menuitem.MenuItem;
 import application.model.order.Order;
 import application.model.order.OrderState;
 import application.utilities.Validation;
@@ -14,6 +13,8 @@ import application.view.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,41 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         menuItemSelectionPanel.addRestaurantViewObserver(this);
         orderStatusPanel.addRestaurantViewObserver(this);
         orderDetailsPanel.addRestaurantViewObserver(this);
+
+        commandPanel.getPrepareButton().setEnabled(false);
+        commandPanel.getBillButton().setEnabled(false);
+
+        /*
+         * Handle all button enable and disbale events here
+         */
+        orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = orderStatusPanel.getServedOrdersTable().rowAtPoint(e.getPoint());
+                orderStatusPanel.getServedOrdersTable().getSelectionModel().setSelectionInterval(row, row);
+                commandPanel.getPrepareButton().setEnabled(false);
+            }
+        });
+
+        orderStatusPanel.getWaitingOrdersTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = orderStatusPanel.getWaitingOrdersTable().rowAtPoint(e.getPoint());
+                orderStatusPanel.getWaitingOrdersTable().getSelectionModel().setSelectionInterval(row, row);
+                commandPanel.getPrepareButton().setEnabled(true);
+            }
+        });
+
+      orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int row = orderStatusPanel.getServedOrdersTable().rowAtPoint(e.getPoint());
+                orderStatusPanel.getServedOrdersTable().getSelectionModel().setSelectionInterval(row, row);
+                commandPanel.getBillButton().setEnabled(true);
+            }
+        });
+
     }
 
     @Override
@@ -122,6 +158,8 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
         ((MenuItemTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
         ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+
+        ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
     @Override
@@ -148,15 +186,35 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
 
-        ((MenuItemTableModel) orderItemDetailsTable.getModel())
-                .setMenuItems(new ArrayList<>(order.getMenuItemSelections().keySet()));
-        ((MenuItemTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+        List<MenuItem> selectedOrderMenuItems = new ArrayList<>();
+
+        for (MenuItem item : order.getMenuItemSelections().keySet()) {
+            int quantity = order.getMenuItemSelections().get(item);
+
+            for (int i = 0; i < quantity; i++) {
+                selectedOrderMenuItems.add(item);
+            }
+        }
+
+        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel())
+                .setMenuItems(selectedOrderMenuItems);
+
+        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+
+        ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
     @Override
     public void prepareButtonPressed() {
         if (orderStatusPanel.getWaitingOrdersTable().getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(restaurantView, "Please select a order to prepare", "Invalid Prepare Selection", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String dialogMessage = "Are you sure you wish to mark this order as prepared?";
+        int result = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Mark order as prepared", JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.NO_OPTION) {
             return;
         }
 
@@ -174,11 +232,19 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             return;
         }
 
+        String dialogMessage = "Are you sure you want to mark this order as billed?";
+        int dialogResult = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Mark order as billed", JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.NO_OPTION) {
+            return;
+        }
+
         JTable orderTable = orderStatusPanel.getServedOrdersTable();
         OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
         Order selectedOrder = orderTableModel.getOrder(orderTable.getSelectedRow());
         selectedOrder.setState(OrderState.BILLED);
         restaurantModel.storeOrder(selectedOrder);
+        commandPanel.getBillButton().setEnabled(false);
     }
 
     @Override
@@ -192,7 +258,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
         orderStatusPanel.getWaitingOrdersTable().clearSelection();
         orderStatusPanel.getServedOrdersTable().clearSelection();
-        
+
         customerDetailsPanel.getButtonGroup().clearSelection();
 
 //        commandPanel.getSubmitOrderButton().setEnabled(false);

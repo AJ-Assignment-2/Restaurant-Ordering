@@ -19,8 +19,8 @@ public class OrderStatusPanel extends JPanel implements ObservableRestaurantView
     private JLabel preparedOrdersLabel;
     private JTable waitingOrdersTable;
     private JTable servedOrdersTable;
-    private JScrollPane scrollableWaitingOrdersTextArea;
-    private JScrollPane scrollableServingOrdersTextArea;
+    private JScrollPane scrollableWaitingOrdersContainer;
+    private JScrollPane scrollableServedOrdersContainer;
 
     public OrderStatusPanel() {
         observers = new ArrayList<>();
@@ -40,15 +40,18 @@ public class OrderStatusPanel extends JPanel implements ObservableRestaurantView
         waitingOrdersLabel.setHorizontalAlignment(JLabel.CENTER);
         preparedOrdersLabel = new JLabel("Served orders waiting to be billed");
         preparedOrdersLabel.setHorizontalAlignment(JLabel.CENTER);
-        scrollableWaitingOrdersTextArea = new JScrollPane(waitingOrdersTable);
-        scrollableWaitingOrdersTextArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollableServingOrdersTextArea = new JScrollPane(servedOrdersTable);
-        scrollableServingOrdersTextArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollableWaitingOrdersContainer = new JScrollPane(waitingOrdersTable);
+        //scrollableWaitingOrdersContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollableServedOrdersContainer = new JScrollPane(servedOrdersTable);
+        //scrollableServedOrdersContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        scrollableServedOrdersContainer.setPreferredSize(new Dimension(400, 150));
+        scrollableWaitingOrdersContainer.setPreferredSize(new Dimension(400, 150));
 
         waitingOrdersPanel.add(waitingOrdersLabel);
-        waitingOrdersPanel.add(waitingOrdersTable);
+        waitingOrdersPanel.add(scrollableWaitingOrdersContainer);
         preparedOrdersPanel.add(preparedOrdersLabel);
-        preparedOrdersPanel.add(servedOrdersTable);
+        preparedOrdersPanel.add(scrollableServedOrdersContainer);
 
         add(waitingOrdersPanel);
         add(preparedOrdersPanel);
