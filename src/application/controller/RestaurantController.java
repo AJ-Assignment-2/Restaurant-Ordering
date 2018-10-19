@@ -91,8 +91,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int row = orderStatusPanel.getServedOrdersTable().rowAtPoint(e.getPoint());
-                orderStatusPanel.getServedOrdersTable().getSelectionModel().setSelectionInterval(row, row);
                 commandPanel.getPrepareButton().setEnabled(false);
             }
         });
@@ -100,8 +98,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getWaitingOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int row = orderStatusPanel.getWaitingOrdersTable().rowAtPoint(e.getPoint());
-                orderStatusPanel.getWaitingOrdersTable().getSelectionModel().setSelectionInterval(row, row);
                 commandPanel.getPrepareButton().setEnabled(true);
             }
         });
@@ -109,9 +105,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                int row = orderStatusPanel.getServedOrdersTable().rowAtPoint(e.getPoint());
-                orderStatusPanel.getServedOrdersTable().getSelectionModel().setSelectionInterval(row, row);
                 commandPanel.getBillButton().setEnabled(true);
             }
         });
@@ -134,12 +127,12 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         }
 
         // Check if data types are correct
-        if (!Validation.isAlpha(customerName)) {
-            JOptionPane.showMessageDialog(restaurantView, "Please enter a valid name", "Invalid Customer Name", JOptionPane.ERROR_MESSAGE);
+        if (customerName.chars().allMatch(Character::isLetter)) {
+            JOptionPane.showMessageDialog(restaurantView, "Please enter a valid (first) name", "Invalid Customer Name", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!Validation.isNumeric(tableNumber)) {
+        if (tableNumber.chars().allMatch(Character::isDigit)) {
             JOptionPane.showMessageDialog(restaurantView, "Please enter a valid table number", "Invalid Table Number", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -149,6 +142,12 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             JOptionPane.showMessageDialog(restaurantView, "Please select a meal type", "Invalid Meal Type", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+//        String dialogMessage = "Are you sure you wish to add these items to your order?";
+//
+//        int dialogResult = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Confirm additional order item", JOptionPane.YES_NO_OPTION);
+//
+//        if (dialogResult == JOptionPane.NO_OPTION) return;
 
         Order order = restaurantModel.getOrder(Integer.parseInt(tableNumber));
         if (order == null) {
@@ -185,8 +184,9 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         focusedItems.add((MenuItem) menuItemSelectionPanel.getBeverageComboBox().getSelectedItem());
 
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
-        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
-        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+      
+        orderItemDetailsTable.setModel(new MenuItemTableModel(focusedItems));
+        ((MenuItemTableModel)orderItemDetailsTable.getModel()).fireTableDataChanged();
 
         ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
@@ -229,8 +229,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             }
         }
 
-        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel())
-                .setMenuItems(selectedOrderMenuItems);
+        orderItemDetailsTable.setModel(new MenuItemTotalsTableModel(selectedOrderMenuItems));
 
         ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
 
@@ -251,9 +250,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         String dialogMessage = "Are you sure you wish to mark this order as prepared?";
         int result = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Mark order as prepared", JOptionPane.YES_NO_OPTION);
 
-        if (result == JOptionPane.NO_OPTION) {
-            return;
-        }
+        if (result == JOptionPane.NO_OPTION) return;
 
         JTable orderTable = orderStatusPanel.getWaitingOrdersTable();
         OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
@@ -276,9 +273,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         String dialogMessage = "Are you sure you want to mark this order as billed?";
         int dialogResult = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Mark order as billed", JOptionPane.YES_NO_OPTION);
 
-        if (dialogResult == JOptionPane.NO_OPTION) {
-            return;
-        }
+        if (dialogResult == JOptionPane.NO_OPTION) return;
 
         JTable orderTable = orderStatusPanel.getServedOrdersTable();
         OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
@@ -297,6 +292,9 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         MenuItemTotalsTableModel menuItemTableModel = (MenuItemTotalsTableModel) orderDetailsPanel.getOrderItemDetailsTable().getModel();
         menuItemTableModel.setMenuItems(new ArrayList<>());
         menuItemTableModel.fireTableDataChanged();
+        
+        menuItemSelectionPanel.getBeverageComboBox().setModel(new DefaultComboBoxModel());
+        menuItemSelectionPanel.getFoodComboBox().setModel(new DefaultComboBoxModel());
 
         customerDetailsPanel.getCustomerNameTextArea().setText("");
         customerDetailsPanel.getTableNumberTextArea().setText("");
@@ -306,8 +304,8 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
         customerDetailsPanel.getButtonGroup().clearSelection();
 
-//        commandPanel.getSubmitOrderButton().setEnabled(false);
-//        commandPanel.getClearDisplayButton().setEnabled(false);
+        commandPanel.getPrepareButton().setEnabled(false);
+        commandPanel.getBillButton().setEnabled(false);
     }
 
     /**

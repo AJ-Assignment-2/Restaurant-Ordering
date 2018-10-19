@@ -33,7 +33,7 @@ public class CommandPanel extends JPanel implements ObservableRestaurantView {
 
         enterDataButton = new JButton("Enter Data");
         displayChoicesButton = new JButton("Display Choices");
-        displayOrderButton = new JButton("Display Orders");
+        displayOrderButton = new JButton("Display Order");
         prepareButton = new JButton("Prepare Order");
         billButton = new JButton("Bill Order");
         clearDisplayButton = new JButton("Clear Display");
