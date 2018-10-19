@@ -9,6 +9,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class of order status panel extends JPanel and implements observable restaurant view
+ *
+ */
 public class OrderStatusPanel extends JPanel implements ObservableRestaurantView, RestaurantModelObserver {
     private List<RestaurantViewObserver> observers;
 
@@ -22,6 +26,10 @@ public class OrderStatusPanel extends JPanel implements ObservableRestaurantView
     private JScrollPane scrollableWaitingOrdersContainer;
     private JScrollPane scrollableServedOrdersContainer;
 
+    /**
+     * A constructor of order status panel
+     *
+     */
     public OrderStatusPanel() {
         observers = new ArrayList<>();
 
@@ -57,6 +65,11 @@ public class OrderStatusPanel extends JPanel implements ObservableRestaurantView
         add(preparedOrdersPanel);
     }
 
+    /**
+     * A method to update order
+     *
+     * @param orders list of order
+     */
     @Override
     public void ordersUpdated(List<Order> orders) {
         List<Order> waitingOrders = new ArrayList<>();
@@ -80,19 +93,39 @@ public class OrderStatusPanel extends JPanel implements ObservableRestaurantView
         ((OrderTableModel)servedOrdersTable.getModel()).fireTableDataChanged();
     }
 
+    /**
+     * A method to get served orders table
+     *
+     * @return JTable server orders table 
+     */
     public JTable getServedOrdersTable() {
         return servedOrdersTable;
     }
 
+    /**
+     * A method to get waiting orders table
+     *
+     * @return JTable waiing orders table 
+     */
     public JTable getWaitingOrdersTable() {
         return waitingOrdersTable;
     }
-
+    
+    /**
+     * A method to add restaurant view observer
+     * @param observer observer of restaurant view
+     * 
+     */
     @Override
     public void addRestaurantViewObserver(RestaurantViewObserver observer) {
         observers.add(observer);
     }
-
+    
+    /**
+     * A method to add restaurant view observer
+     * @param observer observer of restaurant view
+     * 
+     */
     @Override
     public void removeRestaurantViewObserver(RestaurantViewObserver observer) {
         observers.add(observer);

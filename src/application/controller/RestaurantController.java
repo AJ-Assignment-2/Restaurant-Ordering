@@ -18,6 +18,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class of restaurant screen controller implements restaurant model and view interface
+ *
+ */
 public class RestaurantController implements RestaurantModelObserver, RestaurantViewObserver {
 
     private RestaurantModel restaurantModel;
@@ -29,6 +33,13 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
     private OrderStatusPanel orderStatusPanel;
     private OrderDetailsPanel orderDetailsPanel;
 
+    /**
+     * A constructor of restuarant controller
+     * 
+     * @param model model of restaurant 
+     * @param view JPanel of restaurant view
+     *
+     */
     public RestaurantController(RestaurantModel model, JPanel view) {
         this.restaurantModel = model;
         this.restaurantView = view;
@@ -41,6 +52,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         initView();
     }
 
+    /**
+     * A method to execute the view of standalone version screen
+     *
+     */
     private void initView() {
         restaurantView.setLayout(new BorderLayout());
         restaurantView.add(commandPanel, BorderLayout.SOUTH);
@@ -103,6 +118,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 
     }
 
+    /**
+     * A method to execute enter data button when it pressed
+     *
+     */
     @Override
     public void enterDataButtonPressed() {
         String customerName = customerDetailsPanel.getCustomerNameTextArea().getText();
@@ -149,6 +168,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         commandPanel.getClearDisplayButton().setEnabled(true);
     }
 
+    /**
+     * A method to display choices button when it pressed
+     *
+     */
     @Override
     public void displayChoicesButtonPressed() {
         if (menuItemSelectionPanel.getFoodComboBox().getSelectedItem() == null
@@ -168,6 +191,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
+    /**
+     * A method to display order button when it pressed
+     *
+     */
     @Override
     public void displayOrderButtonPressed() {
         if (orderStatusPanel.getWaitingOrdersTable().getSelectedRow() == -1
@@ -210,6 +237,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
 
+    /**
+     * A method to execute prepare button when it pressed
+     *
+     */
     @Override
     public void prepareButtonPressed() {
         if (orderStatusPanel.getWaitingOrdersTable().getSelectedRow() == -1) {
@@ -231,6 +262,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         restaurantModel.storeOrder(selectedOrder);
     }
 
+    /**
+     * A method to execute ordered bill when it pressed
+     *
+     */
     @Override
     public void billButtonPressed() {
         if (orderStatusPanel.getServedOrdersTable().getSelectedRow() == -1) {
@@ -253,6 +288,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         commandPanel.getBillButton().setEnabled(false);
     }
 
+    /**
+     * A method to clear display button when it pressed
+     *
+     */
     @Override
     public void clearDisplayButtonPressed() {
         MenuItemTotalsTableModel menuItemTableModel = (MenuItemTotalsTableModel) orderDetailsPanel.getOrderItemDetailsTable().getModel();
@@ -271,16 +310,30 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
 //        commandPanel.getClearDisplayButton().setEnabled(false);
     }
 
+    /**
+     * A method of pressed quit button when it pressed
+     *
+     */
     @Override
     public void quitButtonPressed() {
         System.exit(0);
     }
 
+    /**
+     * A method of updating orders
+     *
+     * @param orders list of order
+     */
     @Override
     public void ordersUpdated(List<Order> orders) {
 
     }
 
+    /**
+     * A method of type of menu item
+     *
+     * @param mealTime type of menu item
+     */
     @Override
     public void mealTimeSelected(MenuItemType mealTime) {
         JComboBox beverageComboBox = menuItemSelectionPanel.getBeverageComboBox();
@@ -293,6 +346,10 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         foodComboBox.setRenderer(new MenuItemNameCellRenderer());
     }
 
+    /**
+     * A class of menu item name cell render
+     *
+     */
     private class MenuItemNameCellRenderer extends DefaultListCellRenderer {
 
         @Override

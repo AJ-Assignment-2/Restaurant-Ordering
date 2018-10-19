@@ -23,10 +23,20 @@ public class MenuItemTotalsTableModel extends AbstractTableModel {
 
     private List<MenuItem> menuItems;
 
+    /**
+     * Set menu items
+     *
+     * @param menuItems list of menu item
+     */
     public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
 
+    /**
+     * Menu items totals table model
+     *
+     * @param menuItems list of menu item
+     */
     public MenuItemTotalsTableModel(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
