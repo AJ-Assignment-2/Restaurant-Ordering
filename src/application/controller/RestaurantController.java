@@ -76,8 +76,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int row = orderStatusPanel.getServedOrdersTable().rowAtPoint(e.getPoint());
-                orderStatusPanel.getServedOrdersTable().getSelectionModel().setSelectionInterval(row, row);
                 commandPanel.getPrepareButton().setEnabled(false);
             }
         });
@@ -85,8 +83,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getWaitingOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int row = orderStatusPanel.getWaitingOrdersTable().rowAtPoint(e.getPoint());
-                orderStatusPanel.getWaitingOrdersTable().getSelectionModel().setSelectionInterval(row, row);
                 commandPanel.getPrepareButton().setEnabled(true);
             }
         });
@@ -94,9 +90,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                int row = orderStatusPanel.getServedOrdersTable().rowAtPoint(e.getPoint());
-                orderStatusPanel.getServedOrdersTable().getSelectionModel().setSelectionInterval(row, row);
                 commandPanel.getBillButton().setEnabled(true);
             }
         });
@@ -197,8 +190,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             order = model.getOrder(table.getSelectedRow());
         }
 
-
-
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
 
         List<MenuItem> selectedOrderMenuItems = new ArrayList<>();
@@ -211,8 +202,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             }
         }
 
-        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel())
-                .setMenuItems(selectedOrderMenuItems);
+        orderItemDetailsTable.setModel(new MenuItemTotalsTableModel(selectedOrderMenuItems));
 
         ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
 
