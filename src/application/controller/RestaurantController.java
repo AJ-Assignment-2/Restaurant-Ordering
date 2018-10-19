@@ -264,6 +264,9 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().clearSelection();
 
         customerDetailsPanel.getButtonGroup().clearSelection();
+        
+        commandPanel.getPrepareButton().setEnabled(false);
+        commandPanel.getBillButton().setEnabled(false);
     }
 
     @Override
