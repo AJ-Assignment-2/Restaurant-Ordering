@@ -258,6 +258,9 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         MenuItemTotalsTableModel menuItemTableModel = (MenuItemTotalsTableModel) orderDetailsPanel.getOrderItemDetailsTable().getModel();
         menuItemTableModel.setMenuItems(new ArrayList<>());
         menuItemTableModel.fireTableDataChanged();
+        
+        menuItemSelectionPanel.getBeverageComboBox().setModel(new DefaultComboBoxModel());
+        menuItemSelectionPanel.getFoodComboBox().setModel(new DefaultComboBoxModel());
 
         customerDetailsPanel.getCustomerNameTextArea().setText("");
         customerDetailsPanel.getTableNumberTextArea().setText("");
@@ -266,9 +269,6 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().clearSelection();
 
         customerDetailsPanel.getButtonGroup().clearSelection();
-
-//        commandPanel.getSubmitOrderButton().setEnabled(false);
-//        commandPanel.getClearDisplayButton().setEnabled(false);
     }
 
     @Override
