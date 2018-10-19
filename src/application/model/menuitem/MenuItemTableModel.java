@@ -19,10 +19,21 @@ public class MenuItemTableModel extends AbstractTableModel {
 
     private List<MenuItem> menuItems;
 
+    /**
+     * A constructor menu item table model
+     *
+     * @param menuItems list of menu item
+     */
     public MenuItemTableModel(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
 
+    /**
+     * Get an item
+     *
+     * @param row row of table item
+     * @return MenuItem a menu of an item
+     */
     public MenuItem getItem(int row) {
         if (menuItems != null) {
             return menuItems.get(row);
@@ -31,6 +42,11 @@ public class MenuItemTableModel extends AbstractTableModel {
         }
     }
 
+    /**
+     * Set menu items
+     *
+     * @param menuItems list of an menu item
+     */
     public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }

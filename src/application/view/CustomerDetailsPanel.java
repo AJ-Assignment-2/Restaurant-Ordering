@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class of customer details panel extends JPanel and implements observable restaurant view
+ *
+ */
 public class CustomerDetailsPanel extends JPanel implements ObservableRestaurantView {
     private List<RestaurantViewObserver> observers;
 
@@ -27,6 +31,10 @@ public class CustomerDetailsPanel extends JPanel implements ObservableRestaurant
     private ButtonGroup radioButtonGroup;
 
 
+    /**
+     * A constructor of customer details panel
+     * 
+     */
     public CustomerDetailsPanel() {
         observers = new ArrayList<>();
 
@@ -66,29 +74,55 @@ public class CustomerDetailsPanel extends JPanel implements ObservableRestaurant
         add(tablePanel);
         add(mealPanel);
     }
-
+    
+    /**
+     * A method to get button group
+     * @return JTextArea text area of customer name
+     * 
+     */
     public JTextArea getCustomerNameTextArea() {
         return customerNameTextArea;
     }
-
+    
+    /**
+     * A method to get button group
+     * @return JTextArea text area of table number
+     * 
+     */
     public JTextArea getTableNumberTextArea() {
         return tableNumberTextArea;
     }
     
+    /**
+     * A method to get button group
+     * @return ButtonGroup group or radio button
+     */
     public ButtonGroup getButtonGroup() {
         return radioButtonGroup;
     }
     
+    /**
+     * A method to add restaurant view observer
+     * @param observer observer of restaurant view
+     */
     @Override
     public void addRestaurantViewObserver(RestaurantViewObserver observer) {
         observers.add(observer);
     }
 
+    /**
+     * A method to remove restaurant view observer
+     * @param observer observer of restaurant view
+     */
     @Override
     public void removeRestaurantViewObserver(RestaurantViewObserver observer) {
         observers.remove(observer);
     }
 
+    /**
+     * A class to listen meal type
+     * 
+     */
     private class MealTypeSelectedListener implements ActionListener {
         private final MenuItemType type;
 
