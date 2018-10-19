@@ -131,6 +131,12 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             return;
         }
 
+//        String dialogMessage = "Are you sure you wish to add these items to your order?";
+//
+//        int dialogResult = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Confirm additional order item", JOptionPane.YES_NO_OPTION);
+//
+//        if (dialogResult == JOptionPane.NO_OPTION) return;
+
         Order order = restaurantModel.getOrder(Integer.parseInt(tableNumber));
         if (order == null) {
             order = new Order();
@@ -162,8 +168,9 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         focusedItems.add((MenuItem) menuItemSelectionPanel.getBeverageComboBox().getSelectedItem());
 
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
-        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).setMenuItems(focusedItems);
-        ((MenuItemTotalsTableModel) orderItemDetailsTable.getModel()).fireTableDataChanged();
+      
+        orderItemDetailsTable.setModel(new MenuItemTableModel(focusedItems));
+        ((MenuItemTableModel)orderItemDetailsTable.getModel()).fireTableDataChanged();
 
         ColumnWidthUtil.adjustColumnWidths(orderItemDetailsTable, new int[]{0});
     }
@@ -189,6 +196,8 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
             model = (OrderTableModel) table.getModel();
             order = model.getOrder(table.getSelectedRow());
         }
+
+
 
         JTable orderItemDetailsTable = orderDetailsPanel.getOrderItemDetailsTable();
 
@@ -220,9 +229,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         String dialogMessage = "Are you sure you wish to mark this order as prepared?";
         int result = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Mark order as prepared", JOptionPane.YES_NO_OPTION);
 
-        if (result == JOptionPane.NO_OPTION) {
-            return;
-        }
+        if (result == JOptionPane.NO_OPTION) return;
 
         JTable orderTable = orderStatusPanel.getWaitingOrdersTable();
         OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
@@ -241,9 +248,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         String dialogMessage = "Are you sure you want to mark this order as billed?";
         int dialogResult = JOptionPane.showConfirmDialog(restaurantView, dialogMessage, "Mark order as billed", JOptionPane.YES_NO_OPTION);
 
-        if (dialogResult == JOptionPane.NO_OPTION) {
-            return;
-        }
+        if (dialogResult == JOptionPane.NO_OPTION) return;
 
         JTable orderTable = orderStatusPanel.getServedOrdersTable();
         OrderTableModel orderTableModel = (OrderTableModel) orderTable.getModel();
