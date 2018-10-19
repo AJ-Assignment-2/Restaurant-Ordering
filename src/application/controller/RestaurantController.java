@@ -108,12 +108,12 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         }
 
         // Check if data types are correct
-        if (!Validation.isAlpha(customerName)) {
-            JOptionPane.showMessageDialog(restaurantView, "Please enter a valid name", "Invalid Customer Name", JOptionPane.ERROR_MESSAGE);
+        if (customerName.chars().allMatch(Character::isLetter)) {
+            JOptionPane.showMessageDialog(restaurantView, "Please enter a valid (first) name", "Invalid Customer Name", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!Validation.isNumeric(tableNumber)) {
+        if (tableNumber.chars().allMatch(Character::isDigit)) {
             JOptionPane.showMessageDialog(restaurantView, "Please enter a valid table number", "Invalid Table Number", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -264,7 +264,7 @@ public class RestaurantController implements RestaurantModelObserver, Restaurant
         orderStatusPanel.getServedOrdersTable().clearSelection();
 
         customerDetailsPanel.getButtonGroup().clearSelection();
-        
+
         commandPanel.getPrepareButton().setEnabled(false);
         commandPanel.getBillButton().setEnabled(false);
     }
